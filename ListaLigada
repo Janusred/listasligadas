@@ -1,0 +1,149 @@
+package generico;
+
+import java.util.Scanner;
+
+//Author JanusLds
+
+public class Ligadadoble <T> {
+    private Scanner nodofront;
+	
+	private Nodo<T> list;
+	private int count;
+
+	/************************************
+	 * Creacion de la lista
+	 *************************************/
+	public Ligadadoble() {
+		count = 0;
+		list = null;
+	}
+
+	/************************************
+	 * Agregamos elemntos
+	 *************************************/
+	public void addToFront(T data) {
+         
+		Nodo<T> node = new Nodo<T>(data);
+		node.setNext(list);
+		list = node;
+		count++;
+                
+	}
+
+	/************************************
+	 * agregamos elemtos
+	 *************************************/
+	public void addToEnd(T data) {
+		Nodo<T> node = new Nodo<T>(data);
+		Nodo<T> current;
+
+		// Is it the first one on the list?
+		if (list == null) {
+			list = node;
+		} else {
+			
+			current = list;
+			while (current.getNext() != null) {
+				current = current.getNext();
+			}
+			
+			current.setNext(node);
+		}
+		count++;
+	}
+
+	
+	public void findInList(T data) {
+		Nodo<T> current = list;
+		int pos = 0;
+
+		while (current != null) {
+			if (current.getData() == data) {
+				System.out.println(data + " True " + pos + ".");
+				return;
+			} else {
+				pos++;
+				current = current.getNext();
+			}
+		}
+		System.out.println(data + " False.");
+	}
+
+	
+	public void deleteFromFront() {
+		if (isEmpty())
+			return;
+		else {
+			list = list.getNext();
+			count--;
+		}
+	}
+
+	
+	public void deleteFromEnd() {
+		if (isEmpty())
+			return;
+		else {
+			if (list.getNext() == null) {
+				list = null;
+			} else {
+				Nodo<T> temp = list;
+				Nodo<T> prev = list;
+				while (temp.getNext() != null) {
+					prev = temp;
+					temp = temp.getNext();
+				}
+				prev.setNext(null);
+			}
+		}
+		count--;
+	}
+
+	
+	public void replace(T data, int index) {
+		Nodo<T> current = list;
+		if (index > count) {
+			throw new IllegalArgumentException("Bad Index");
+		}
+		for (int i = 0; i < index; i++) {
+			current = current.getNext();
+		}
+		current.setData(data);
+	}
+
+	
+	public T get(int index) {
+		if (index < 0 || index >= count) {
+			throw new IndexOutOfBoundsException("Bad Index");
+		}
+		Nodo<T> current = list;
+		for (int i = 0; i < index; i++) {
+			current = current.getNext();
+		}
+		return current.getData();
+	}
+
+	
+	public boolean isEmpty() {
+		return (count == 0);
+	}
+
+	
+	public int size() {
+		return count;
+                
+	}
+
+	
+	@Override
+	public String toString() {
+		StringBuilder strB = new StringBuilder();
+		Nodo<T> current = list;
+		strB.append("Size: ").append(count).append("\n");
+		while (current != null) {
+			strB.append("[").append(current.getData()).append("]\n");
+			current = current.getNext();
+		}
+		return strB.toString();
+	}
+}
